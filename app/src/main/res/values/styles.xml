@@ -1,0 +1,34 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Main theme colors -->
+        <!--   your app branding color for the app bar -->
+        <item name="colorPrimary">@color/primary</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+    <style name="no_alarms">
+        <item name="android:textSize">@dimen/alarm_info_font_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="body">
+        <item name="android:textSize">@dimen/body_font_size</item>
+    </style>
+
+    <style name="frequency_picker_dialog">
+        <item name="bpDialogBackground">@color/light_gray</item>
+        <item name="bpTitleColor">@color/white</item>
+        <item name="bpTextColor">@color/white</item>
+        <item name="bpDeleteIcon">@drawable/ic_backspace_dark</item>
+        <item name="bpCheckIcon">@drawable/ic_check_dark</item>
+        <item name="bpKeyBackground">@color/light_gray</item>
+        <item name="bpButtonBackground">@color/light_gray</item>
+        <item name="bpTitleDividerColor">@color/accent</item>
+        <item name="bpDividerColor">@color/accent</item>
+        <item name="bpKeyboardIndicatorColor">@color/light_gray</item>
+    </style>
+</resources>

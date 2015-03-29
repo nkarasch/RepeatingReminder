@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="alarm_info_font_size">36sp</dimen>
+    <dimen name="body_font_size">18sp</dimen>
+    <dimen name="padding_checkbox">48dp</dimen>
+</resources>

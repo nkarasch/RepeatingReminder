@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Repeating Reminder</string>
+    <string name="delete_alert">Delete Alert</string>
+    <string name="vibrate">Vibrate</string>
+    <string name="add_alert">Add alert</string>
+    <string name="schedule">Schedule</string>
+    <string name="expand">Show options</string>
+    <string name="light">Flash LED</string>
+    <string name="mute">Mute</string>
+</resources>
