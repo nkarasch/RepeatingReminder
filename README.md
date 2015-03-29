@@ -1,9 +1,11 @@
 # RepeatingReminder
-An Android application for scheduling notifications to fire at specified intervals..
+A simple Android 4.0+ application modeled after the Lollipop DeskClock. Allows the user to schedule multiple unique notifications to repeatedly fire at specific intervals, on selected days of the week, and within chosen time ranges.  
+
+This is useful for actions that need to be performed throughout long portions of the day. Taking a break from the computer every hour or taking the dog for a walk every three hours are perfect fits.  
 
 # Credits  
 **Betterpickers**  
-Used for the interval, start time, and end time selection dialogs. Thanks to Derek Brameyer and everyone who has contributed.   
+Used for the interval, start time, and end time selection dialogs. Thanks to Derek Brameyer and everyone who has contributed.  
 https://github.com/derekbrameyer/android-betterpickers  
 
 **DialogBuilder**  
