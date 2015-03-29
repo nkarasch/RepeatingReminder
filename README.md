@@ -1,8 +1,9 @@
 # RepeatingReminder
 A simple Android 4.0+ application modeled after the Lollipop DeskClock. Allows the user to schedule multiple unique notifications to repeatedly fire at specific intervals, on selected days of the week, and within chosen time ranges.  
 
-This is useful for actions that need to be performed throughout long portions of the day. Taking a break from the computer every hour or taking the dog for a walk every three hours are perfect fits.  
+This is useful for actions that need to be performed throughout the day. Things like taking a break from the computer every hour or taking the dog for a walk every three hours are the intended use case.  
 
+<img src="screenshot1.png" width="300" height="533" />  <img src="screenshot2.png" width="300" height="533" />
 # Credits  
 **Betterpickers**  
 Used for the interval, start time, and end time selection dialogs. Thanks to Derek Brameyer and everyone who has contributed.  
@@ -14,6 +15,7 @@ https://gist.github.com/jaredrummler/f8f562cdf3253c66516b
 
 **Android Lollipop DeskClock**  
 All of the icons and the functions for choosing the varying background color come from here. The interface was also the inspiration for this one.  
+https://android.googlesource.com/platform/packages/apps/DeskClock/+/lollipop-release
 
 # License  
     Copyright 2015 Nicholas Karasch
