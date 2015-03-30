@@ -124,7 +124,6 @@ public class AlertBroadcastReceiver extends BroadcastReceiver {
                         calendar.add(Calendar.SECOND, alert.getFrequency());
                         return calendar;
                     case AFTER_END:
-                        Log.i("between", "3");
                         getDayToStart(calendar, alert);
                         break;
                     default:

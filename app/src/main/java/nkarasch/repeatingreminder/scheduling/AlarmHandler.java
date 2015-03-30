@@ -51,11 +51,8 @@ public class AlarmHandler {
         stopAlert(alert);
 
         PendingIntent sender = PendingIntent.getBroadcast(mContext, alert.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alert.isSchedule() ? Calendar.getInstance().getTimeInMillis() :
-                Calendar.getInstance().getTimeInMillis() + (alert.getFrequency() * 1000), sender);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), sender);
     }
 
     public void stopAlert(Alert alert) {
