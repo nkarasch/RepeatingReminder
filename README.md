@@ -3,7 +3,11 @@ A simple Android 4.0+ application modeled after the Lollipop DeskClock. Allows t
 
 This is useful for actions that need to be performed throughout the day. Things like taking a break from the computer every hour or taking the dog for a walk every three hours are the intended use case.  
 
-<img src="screenshot1.png" width="300" height="533" />  <img src="screenshot2.png" width="300" height="533" />
+<img src="screenshot1.png" width="300" height="533" />  <img src="screenshot2.png" width="300" height="533" />  
+<src="https://camo.githubusercontent.com/138b9f820d7add9e7e1d7e6331fddea012f549f4/687474703a2f2f646576656c6f7065722e616e64726f69642e636f6d2f696d616765732f6272616e642f656e5f6170705f7267625f776f5f34352e706e67" data-canonical-src="http://developer.android.com/images/brand/en_app_rgb_wo_45.png" style="max-width:100%;">
+
+<a href="https://play.google.com/store/apps/details?id=nkarasch.metronomelife" target="_blank"><img src="http://developer.android.com/images/brand/en_app_rgb_wo_45.png" style="max-width:100%;" /></a>
+
 # Credits  
 **Betterpickers**  
 Used for the interval, start time, and end time selection dialogs. Thanks to Derek Brameyer and everyone who has contributed.  
