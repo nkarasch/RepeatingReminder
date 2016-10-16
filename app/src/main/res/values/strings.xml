@@ -5,6 +5,12 @@
     <string name="add_alert">Add alert</string>
     <string name="schedule">Schedule</string>
     <string name="expand">Show options</string>
-    <string name="light">Flash LED</string>
+    <string name="wake">Wake</string>
     <string name="mute">Mute</string>
+    <string name="alarm_on">Alarm On Time</string>
+    <string name="alarm_off">Alarm Off Time</string>
+    <string name="ringtone">Ringtone</string>
+    <string name="default_ringtone">Default</string>
+    <string name="day_start">12:00am</string>
+    <string name="day_end">11:59pm</string>
 </resources>

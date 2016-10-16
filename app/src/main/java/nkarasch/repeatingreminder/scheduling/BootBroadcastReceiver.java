@@ -1,6 +1,6 @@
 package nkarasch.repeatingreminder.scheduling;
 /*
- * Copyright (C) 2015 Nick Karasch <nkarasch@gmail.com>
+ * Copyright (C) 2015-2016 Nick Karasch <nkarasch@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,13 +30,18 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
      */
     @Override
     public void onReceive(Context context, Intent intent) {
+        if (intent != null) {
+            if (intent.getAction().equalsIgnoreCase(
+                    Intent.ACTION_BOOT_COMPLETED)) {
+                AlarmHandler handler = new AlarmHandler(context);
 
-        AlarmHandler handler = new AlarmHandler(context);
-        List<Alert> alertList = DataUtils.listFromPreferences(context);
-        if (alertList != null) {
-            for (Alert alert : alertList) {
-                if (alert.isOn()) {
-                    handler.startAlert(alert);
+                List<Alert> alertList = DataUtils.listFromPreferences(context);
+                if (alertList != null) {
+                    for (Alert alert : alertList) {
+                        if (alert.isOn()) {
+                            handler.startAlert(alert);
+                        }
+                    }
                 }
             }
         }

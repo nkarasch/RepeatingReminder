@@ -1,6 +1,6 @@
 package nkarasch.repeatingreminder.utils;
 /*
- * Copyright (C) 2015 Nick Karasch <nkarasch@gmail.com>
+ * Copyright (C) 2015-2016 Nick Karasch <nkarasch@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,11 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -28,7 +33,7 @@ import nkarasch.repeatingreminder.Alert;
 public class DataUtils {
 
     private static final String ALERT_LIST = "alert_list";
-    private static final String PREF_NAME = "nkarasch.metronomelife";
+    private static final String PREF_NAME = "nkarasch.repeatingreminder";
     private static Gson gson;
 
     public static void listToPreferences(Context context, List<Alert> alertList) {
@@ -67,5 +72,29 @@ public class DataUtils {
             gson = new Gson();
         }
         return gson;
+    }
+
+    public static byte[] serialize(Object obj) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os;
+        try {
+            os = new ObjectOutputStream(out);
+            os.writeObject(obj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return out.toByteArray();
+    }
+    public static Object deserialize(byte[] data) {
+        ByteArrayInputStream in = new ByteArrayInputStream(data);
+        ObjectInputStream is;
+        Object deserialized = null;
+        try {
+            is = new ObjectInputStream(in);
+            deserialized = is.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return deserialized;
     }
 }

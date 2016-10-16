@@ -1,6 +1,6 @@
 package nkarasch.repeatingreminder.gui;
 /*
- * Copyright (C) 2015 Nick Karasch <nkarasch@gmail.com>
+ * Copyright (C) 2015-2016 Nick Karasch <nkarasch@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@ package nkarasch.repeatingreminder.gui;
  * limitations under the License.
  */
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
+import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,15 +35,17 @@ import nkarasch.repeatingreminder.Alert;
 import nkarasch.repeatingreminder.R;
 import nkarasch.repeatingreminder.utils.DataUtils;
 
+import static nkarasch.repeatingreminder.R.layout.alert;
+
 public class AlertListAdapter extends ArrayAdapter<Alert> {
 
-    private final ActionBarActivity mContext;
+    private final FragmentActivity mContext;
     private final AlarmHandler mAlarmHandler;
     private final LayoutInflater mLayoutInflater;
     private final List<Alert> mAlertList;
 
-    public AlertListAdapter(ActionBarActivity context, AlarmHandler alarmHandler, List<Alert> alertList) {
-        super(context, R.layout.alert, alertList);
+    public AlertListAdapter(FragmentActivity context, AlarmHandler alarmHandler, List<Alert> alertList) {
+        super(context, alert, alertList);
         mContext = context;
         mAlarmHandler = alarmHandler;
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -63,7 +65,6 @@ public class AlertListAdapter extends ArrayAdapter<Alert> {
             public void onClick(View v) {
                 Alert alert;
                 add(alert = new Alert());
-
                /*Every item in the list needs a unique, consistent ID for starting and stopping the BroadcastReceiver.
                  The highest integer that has been used is stored in shared preferences, each item added
                  increments it by one.*/
@@ -86,16 +87,17 @@ public class AlertListAdapter extends ArrayAdapter<Alert> {
      *
      * Using a custom View instead of the traditional "Holder" pattern.
      */
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
         AlertView view;
         if (convertView == null) {
-            view = (AlertView) mLayoutInflater.inflate(R.layout.alert, null);
+            view = (AlertView) mLayoutInflater.inflate(alert, null);
             if (Build.VERSION.SDK_INT < 21) {
                 //create divider line in old APIs where elevation is not available
                 View line = new View(mContext);
-                line.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, 1));
+                line.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
                 line.setBackgroundColor(Color.rgb(51, 51, 51));
                 view.addView(line);
             }

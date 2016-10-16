@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleToggleButtonText">
+        <attr name="font" format="string" />
+    </declare-styleable>
+
+
+    <declare-styleable name="CircleToggleButton">
+
+        <attr name="ctb_on_color" format="color"/>
+        <attr name="ctb_off_color" format="color"/>
+        <attr name="ctb_on_text_color" format="color"/>
+        <attr name="ctb_off_text_color" format="color"/>
+
+    </declare-styleable>
+
+</resources >

@@ -1,6 +1,6 @@
 package nkarasch.repeatingreminder.gui;
 /*
- * Copyright (C) 2015 Nick Karasch <nkarasch@gmail.com>
+ * Copyright (C) 2015-2016 Nick Karasch <nkarasch@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,37 +14,38 @@ package nkarasch.repeatingreminder.gui;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.doomonafireball.betterpickers.hmspicker.HmsPickerBuilder;
-import com.doomonafireball.betterpickers.hmspicker.HmsPickerDialogFragment;
-import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
+import com.codetroopers.betterpickers.hmspicker.HmsPickerBuilder;
+import com.codetroopers.betterpickers.hmspicker.HmsPickerDialogFragment;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.BindView;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import nkarasch.repeatingreminder.scheduling.AlarmHandler;
@@ -52,16 +53,12 @@ import nkarasch.repeatingreminder.Alert;
 import nkarasch.repeatingreminder.R;
 import nkarasch.repeatingreminder.utils.ColorUtils;
 
+import static nkarasch.repeatingreminder.gui.ProgrammableStyleableRadialTimePickerDialogFragment.*;
+
 
 public class AlertView extends LinearLayout {
 
-    private static final String[] longDaysOfWeek = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-    private static final String[] shortDaysOfWeek = {"S", "M", "T", "W", "T", "F", "S"};
-
-    private static Typeface frequencyFont;
-
     private final FragmentActivity mContext;
-    private final LayoutInflater mLayoutInflater;
     private AlertListAdapter mAdapter;
     private AlarmHandler mAlarmHandler;
     private Alert mAlert;
@@ -69,48 +66,110 @@ public class AlertView extends LinearLayout {
     private boolean mSettingState;
 
     //main display components
-    @InjectView(R.id.text_frequency) TextView textFrequency;
-    @InjectView(R.id.switch_on_off) SwitchCompat switchOnOff;
-    @InjectView(R.id.text_label_display) TextView textLabel;
-    @InjectView(R.id.text_days_display) TextView textDays;
-    @InjectView(R.id.text_times_display) TextView textTimes;
-    @InjectView(R.id.iv_expand_down) ImageView imageDownArrow;
-    @InjectView(R.id.ll_schedule_expansion) LinearLayout layoutSchedule;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.text_frequency)
+    TextView textFrequency;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.switch_on_off)
+    SwitchCompat switchOnOff;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.text_label_display)
+    TextView textLabel;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.text_days_display)
+    TextView textDays;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.text_times_display)
+    TextView textTimes;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.iv_expand_down)
+    ImageView imageDownArrow;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.rl_schedule_expansion)
+    RelativeLayout layoutSchedule;
 
     //expansion components
-    @InjectView(R.id.check_vibrate) CheckBox checkVibrate;
-    @InjectView(R.id.text_tone) TextView textRingtone;
-    @InjectView(R.id.check_schedule) CheckBox checkSchedule;
-    @InjectView(R.id.text_time_start) TextView textStartTime;
-    @InjectView(R.id.text_time_end) TextView textEndTime;
-    @InjectView(R.id.ll_schedule_days) LinearLayout layoutScheduleDays;
-    @InjectView(R.id.ll_expansion) LinearLayout layoutExpansion;
-    @InjectView(R.id.check_light) CheckBox checkNotification;
-    @InjectView(R.id.check_mute) CheckBox checkMute;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.checkbox_vibrate)
+    CheckBox checkVibrate;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.text_ringtone)
+    TextView textRingtone;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.checkbox_schedule)
+    CheckBox checkSchedule;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.checkbox_schedule_text)
+    TextView checkScheduleText;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.text_alarm_on)
+    TextView textStartTime;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.text_alarm_off)
+    TextView textEndTime;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.ll_schedule_days)
+    LinearLayout layoutScheduleDays;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.rl_expansion)
+    RelativeLayout layoutExpansion;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.checkbox_wake)
+    CheckBox checkWake;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.checkbox_mute)
+    CheckBox checkMute;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.sunday_toggle)
+    CircleToggleButton sundayButton;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.monday_toggle)
+    CircleToggleButton mondayButton;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.tuesday_toggle)
+    CircleToggleButton tuesdayButton;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.wednesday_toggle)
+    CircleToggleButton wednesdayButton;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.thursday_toggle)
+    CircleToggleButton thursdayButton;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.friday_toggle)
+    CircleToggleButton fridayButton;
+    @SuppressWarnings("WeakerAccess")
+    @BindView(R.id.saturday_toggle)
+    CircleToggleButton saturdayButton;
 
-    private final Button[] mDayOfWeekButtons = new Button[7];
+    private final CircleToggleButton[] mDayOfWeekButtons = new CircleToggleButton[7];
 
-    public AlertView(Context context) {
+    public AlertView(final Context context) {
         super(context);
         this.mContext = (FragmentActivity) context;
-        mLayoutInflater = LayoutInflater.from(context);
     }
 
-    public AlertView(Context context, AttributeSet attrs) {
+    public AlertView(final Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = (FragmentActivity) context;
-        mLayoutInflater = LayoutInflater.from(context);
     }
 
-    public AlertView(Context context, AttributeSet attrs, int defStyle) {
+    public AlertView(final Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.mContext = (FragmentActivity) context;
-        mLayoutInflater = LayoutInflater.from(context);
     }
 
     @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
+    protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+        if (mAlert.isExpanded()) {
+            setBackgroundColor(ColorUtils.getTintedBackgroundColor());
+            layoutExpansion.setVisibility(View.VISIBLE);
+            imageDownArrow.setVisibility(View.GONE);
+        } else {
+            setBackgroundColor(ColorUtils.getCurrentHourColor());
+            layoutExpansion.setVisibility(View.GONE);
+            imageDownArrow.setVisibility(View.VISIBLE);
+        }
     }
 
     public void update(AlertListAdapter adapter, AlarmHandler alarmHandler, int position) {
@@ -118,15 +177,18 @@ public class AlertView extends LinearLayout {
         this.mAlarmHandler = alarmHandler;
         this.mAlert = adapter.getItem(position);
         this.mPosition = position;
-        ButterKnife.inject(this);
-
+        ButterKnife.bind(this);
         mSettingState = true;
+        mDayOfWeekButtons[0] = sundayButton;
+        mDayOfWeekButtons[1] = mondayButton;
+        mDayOfWeekButtons[2] = tuesdayButton;
+        mDayOfWeekButtons[3] = wednesdayButton;
+        mDayOfWeekButtons[4] = thursdayButton;
+        mDayOfWeekButtons[5] = fridayButton;
+        mDayOfWeekButtons[6] = saturdayButton;
+
         createDayOfWeekButtons();
         setState();
-
-        if (Build.VERSION.SDK_INT < 16) {
-            textFrequency.setTypeface(getFrequencyFont());
-        }
 
         if (mAlert.getFrequency() < 5 && mAlert.isNewlyCreated()) {
             frequencyDisplayOnClick();
@@ -154,15 +216,11 @@ public class AlertView extends LinearLayout {
         textLabel.setText(mAlert.getLabel());
         textDays.setText(mAlert.getDaysDisplay());
         textTimes.setText(mAlert.getTimeDisplay());
-        checkNotification.setChecked(mAlert.isLight());
+        checkWake.setChecked(mAlert.isWake());
         checkMute.setChecked(mAlert.isMute());
 
         for (int i = 0; i < 7; i++) {
-            if (mAlert.isDayEnabled(i)) {
-                turnOnDayOfWeek(mDayOfWeekButtons[i]);
-            } else {
-                turnOffDayOfWeek(mDayOfWeekButtons[i]);
-            }
+            mDayOfWeekButtons[i].setActivated(mAlert.isDayEnabled(i));
         }
 
         checkVibrate.setChecked(mAlert.isVibrate());
@@ -183,32 +241,38 @@ public class AlertView extends LinearLayout {
     }
 
     private void createDayOfWeekButtons() {
-        for (int i = 0; i < 7; i++) {
-            if (mDayOfWeekButtons[i] == null) {
-                final Button dayButton = (Button) mLayoutInflater.inflate(
-                        R.layout.day_button, layoutScheduleDays, false);
-                dayButton.setText(shortDaysOfWeek[i]);
-                dayButton.setContentDescription(longDaysOfWeek[i]);
-                layoutScheduleDays.addView(dayButton);
-                mDayOfWeekButtons[i] = dayButton;
-            }
-        }
 
         for (int i = 0; i < 7; i++) {
-            final Button button = mDayOfWeekButtons[i];
+            final CircleToggleButton button = mDayOfWeekButtons[i];
             final int iterator = i;
-            button.setOnClickListener(new OnClickListener() {
+
+            button.setOnTouchListener(new OnTouchListener() {
                 @Override
-                public void onClick(View v) {
-                    if (mAlert.isDayEnabled(iterator)) {
-                        mAlert.setDayEnabled(false, iterator);
-                        turnOffDayOfWeek(button);
-                    } else {
-                        mAlert.setDayEnabled(true, iterator);
-                        turnOnDayOfWeek(button);
+                public boolean onTouch(View v, MotionEvent event) {
+                    v.onTouchEvent(event);
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_UP:
+                            if (mAlert.isDayEnabled(iterator)) {
+                                mAlert.setDayEnabled(false, iterator);
+                            } else {
+                                mAlert.setDayEnabled(true, iterator);
+                            }
+                            textDays.setText(mAlert.getDaysDisplay());
+                            stopAlert();
+                            button.setActivated(!button.isActivated());
+                            button.actionUp();
+                            break;
+
+                        case MotionEvent.ACTION_DOWN:
+                            button.actionDown(event);
+                            break;
+
+                        case MotionEvent.ACTION_CANCEL:
+                            button.actionCancel();
+                            break;
                     }
-                    textDays.setText(mAlert.getDaysDisplay());
-                    stopAlert();
+                    invalidate();
+                    return true;
                 }
             });
         }
@@ -219,7 +283,7 @@ public class AlertView extends LinearLayout {
     public void labelOnClick() {
         final EditText input = new EditText(mContext);
         input.setSingleLine();
-        final int accentColor = getResources().getColor(R.color.accent);
+        final int accentColor = ContextCompat.getColor(mContext, R.color.accent);
         final int textColor = Color.WHITE;
 
         final AlertDialog labelDialog = new DialogBuilder(mContext)
@@ -249,13 +313,14 @@ public class AlertView extends LinearLayout {
         labelDialog.show();
     }
 
+    @SuppressWarnings("WeakerAccess")
     @OnClick(R.id.text_frequency)
     public void frequencyDisplayOnClick() {
         new HmsPickerBuilder()
                 .setFragmentManager(mContext.getSupportFragmentManager())
-                .setStyleResId(R.style.frequency_picker_dialog).addHmsPickerDialogHandler(new HmsPickerDialogFragment.HmsPickerDialogHandler() {
+                .setStyleResId(R.style.frequency_picker_dialog).addHmsPickerDialogHandler(new HmsPickerDialogFragment.HmsPickerDialogHandlerV2() {
             @Override
-            public void onDialogHmsSet(int reference, int hours, int minutes, int seconds) {
+            public void onDialogHmsSet(int reference, boolean isNegative, int hours, int minutes, int seconds) {
                 int frequency = hours * 3600 + minutes * 60 + seconds;
                 if (frequency >= 5) {
                     mAlert.setFrequency(frequency);
@@ -270,7 +335,7 @@ public class AlertView extends LinearLayout {
         }).show();
     }
 
-    @OnClick({R.id.rl_display, R.id.ll_expansion})
+    @OnClick({R.id.rl_display, R.id.rl_expansion})
     public void onDisplayLayoutClicked() {
         if (mAlert.isExpanded()) {
             setBackgroundColor(ColorUtils.getCurrentHourColor());
@@ -298,7 +363,7 @@ public class AlertView extends LinearLayout {
         }
     }
 
-    @OnCheckedChanged(R.id.check_vibrate)
+    @OnCheckedChanged(R.id.checkbox_vibrate)
     public void vibrateOnCheckChanged(boolean isChecked) {
         if (mSettingState) {
             return;
@@ -307,16 +372,26 @@ public class AlertView extends LinearLayout {
         stopAlert();
     }
 
-    @OnCheckedChanged(R.id.check_light)
-    public void lightOnCheckChanged(boolean isChecked) {
+    @OnClick(R.id.checkbox_vibrate_text)
+    public void vibrateCheck() {
+        checkVibrate.setChecked(!checkVibrate.isChecked());
+    }
+
+    @OnCheckedChanged(R.id.checkbox_wake)
+    public void wakeOnCheckChanged(boolean isChecked) {
         if (mSettingState) {
             return;
         }
-        mAlert.setLight(isChecked);
+        mAlert.setWake(isChecked);
         stopAlert();
     }
 
-    @OnCheckedChanged(R.id.check_mute)
+    @OnClick(R.id.checkbox_wake_text)
+    public void ledCheck() {
+        checkWake.setChecked(!checkWake.isChecked());
+    }
+
+    @OnCheckedChanged(R.id.checkbox_mute)
     public void muteOnCheckChanged(boolean isChecked) {
         if (mSettingState) {
             return;
@@ -325,20 +400,19 @@ public class AlertView extends LinearLayout {
         stopAlert();
     }
 
-    @OnCheckedChanged(R.id.check_schedule)
+    @OnClick(R.id.checkbox_mute_text)
+    public void muteCheck() {
+        checkMute.setChecked(!checkMute.isChecked());
+    }
+
+    @OnCheckedChanged(R.id.checkbox_schedule)
     public void scheduleOnCheckChanged(boolean isChecked) {
         if (mSettingState) {
+            expandScheduleDays(isChecked);
             return;
         }
-        if (isChecked) {
-            mAlert.setSchedule(true);
-            layoutSchedule.setVisibility(View.VISIBLE);
-            layoutScheduleDays.setVisibility(View.VISIBLE);
-        } else {
-            mAlert.setSchedule(false);
-            layoutSchedule.setVisibility(View.GONE);
-            layoutScheduleDays.setVisibility(View.GONE);
-        }
+        mAlert.setSchedule(isChecked);
+        expandScheduleDays(isChecked);
 
         textDays.setText(mAlert.getDaysDisplay());
         textStartTime.setText(mAlert.getStartTimeDisplay());
@@ -347,35 +421,68 @@ public class AlertView extends LinearLayout {
         stopAlert();
     }
 
-    @OnClick(R.id.text_time_start)
+    private void expandScheduleDays(boolean isSchedule) {
+        if (isSchedule) {
+            layoutSchedule.setVisibility(View.VISIBLE);
+            layoutScheduleDays.setVisibility(View.VISIBLE);
+
+            checkSchedule.setPadding(0, 0, 0, (int) getResources().getDimension(R.dimen.alarm_bottom_padding) / 2);
+            checkScheduleText.setPadding((int) getResources().getDimension(R.dimen.alarm_text_left_padding), 0, 0, (int) getResources().getDimension(R.dimen.alarm_bottom_padding) / 2);
+        } else {
+            layoutSchedule.setVisibility(View.VISIBLE);
+            layoutScheduleDays.setVisibility(View.VISIBLE);
+            layoutSchedule.setVisibility(View.GONE);
+            layoutScheduleDays.setVisibility(View.GONE);
+            checkSchedule.setPadding(0, 0, 0, (int) getResources().getDimension(R.dimen.alarm_bottom_padding));
+            checkScheduleText.setPadding((int) getResources().getDimension(R.dimen.alarm_text_left_padding), 0, 0, (int) getResources().getDimension(R.dimen.alarm_bottom_padding));
+        }
+    }
+
+    @OnClick(R.id.checkbox_schedule_text)
+    public void checkSchedule() {
+        checkSchedule.setChecked(!checkSchedule.isChecked());
+    }
+
+    @OnClick({R.id.img_alarm_on, R.id.text_alarm_on})
     public void startTimeOnClick() {
-        final RadialTimePickerDialog timePickerDialog1 = new RadialTimePickerDialog();
-        timePickerDialog1.initialize(new RadialTimePickerDialog.OnTimeSetListener() {
+        final ProgrammableStyleableRadialTimePickerDialogFragment timePickerDialog = new ProgrammableStyleableRadialTimePickerDialogFragment();
+        timePickerDialog.setOnTimeSetListener(new OnTimeSetListener() {
             @Override
-            public void onTimeSet(RadialTimePickerDialog dialog, int hour, int minute) {
-                if (isTimeBefore(hour, minute, mAlert.getEndHour(), mAlert.getEndMinute())) {
-                    mAlert.setStartTime(hour, minute);
+            public void onTimeSet(ProgrammableStyleableRadialTimePickerDialogFragment dialog, int hourOfDay, int minute) {
+                if (isTimeBefore(hourOfDay, minute, mAlert.getEndHour(), mAlert.getEndMinute())) {
+                    mAlert.setStartTime(hourOfDay, minute);
                     textStartTime.setText(mAlert.getStartTimeDisplay());
                     textTimes.setText(mAlert.getTimeDisplay());
                     stopAlert();
-                    timePickerDialog1.dismiss();
+                    timePickerDialog.dismiss();
                 } else {
                     Toast.makeText(mContext, "Scheduled start time must be before the end time (" + mAlert.getEndTimeDisplay() + ").", Toast.LENGTH_SHORT).show();
                 }
             }
-        }, mAlert.getStartHour(), mAlert.getStartMinute(), false);
-        timePickerDialog1.setThemeDark(true);
-        timePickerDialog1.show(mContext.getSupportFragmentManager(), null);
+        });
+        timePickerDialog.setStartTime(mAlert.getStartHour(), mAlert.getStartMinute());
+
+        ProgrammableStyleableRadialTimePickerDialogFragment.ProgrammableStyle style = timePickerDialog.new ProgrammableStyle();
+        style.headerBgColor = ContextCompat.getColor(mContext, R.color.primary);
+        style.bodyBgColor = ColorUtils.getTintedBackgroundColor();
+        style.buttonBgColor = ColorUtils.getCurrentHourColor();
+        style.buttonTextColor = ContextCompat.getColor(mContext, android.R.color.white);
+        style.selectedColor = ContextCompat.getColor(mContext, android.R.color.white);
+        style.unselectedColor = ContextCompat.getColor(mContext, android.R.color.white);
+
+        timePickerDialog.setStyleProgramatically(style);
+        timePickerDialog.show(mContext.getSupportFragmentManager(), null);
     }
 
-    @OnClick(R.id.text_time_end)
+    @OnClick({R.id.img_alarm_off, R.id.text_alarm_off})
     public void endTimeOnClick() {
-        final RadialTimePickerDialog timePickerDialog = new RadialTimePickerDialog();
-        timePickerDialog.initialize(new RadialTimePickerDialog.OnTimeSetListener() {
+
+        final ProgrammableStyleableRadialTimePickerDialogFragment timePickerDialog = new ProgrammableStyleableRadialTimePickerDialogFragment();
+        timePickerDialog.setOnTimeSetListener(new OnTimeSetListener() {
             @Override
-            public void onTimeSet(RadialTimePickerDialog dialog, int hour, int minute) {
-                if (isTimeBefore(mAlert.getStartHour(), mAlert.getStartMinute(), hour, minute)) {
-                    mAlert.setEndTime(hour, minute);
+            public void onTimeSet(ProgrammableStyleableRadialTimePickerDialogFragment dialog, int hourOfDay, int minute) {
+                if (isTimeBefore(mAlert.getStartHour(), mAlert.getStartMinute(), hourOfDay, minute)) {
+                    mAlert.setEndTime(hourOfDay, minute);
                     textEndTime.setText(mAlert.getEndTimeDisplay());
                     textTimes.setText(mAlert.getTimeDisplay());
                     stopAlert();
@@ -384,13 +491,24 @@ public class AlertView extends LinearLayout {
                     Toast.makeText(mContext, "Scheduled end time must be after the start time (" + mAlert.getStartTimeDisplay() + ").", Toast.LENGTH_SHORT).show();
                 }
             }
-        }, mAlert.getEndHour(), mAlert.getEndMinute(), false);
-        timePickerDialog.setThemeDark(true);
+        });
+        timePickerDialog.setStartTime(mAlert.getEndHour(), mAlert.getEndMinute());
+
+        ProgrammableStyleableRadialTimePickerDialogFragment.ProgrammableStyle style = timePickerDialog.new ProgrammableStyle();
+        style.headerBgColor = ContextCompat.getColor(mContext, R.color.primary);
+        style.bodyBgColor = ColorUtils.getTintedBackgroundColor();
+        style.buttonBgColor = ColorUtils.getCurrentHourColor();
+        style.buttonTextColor = ContextCompat.getColor(mContext, android.R.color.white);
+        style.selectedColor = ContextCompat.getColor(mContext, android.R.color.white);
+        style.unselectedColor = ContextCompat.getColor(mContext, android.R.color.white);
+
+        timePickerDialog.setStyleProgramatically(style);
         timePickerDialog.show(mContext.getSupportFragmentManager(), null);
     }
 
-    @OnClick(R.id.text_tone)
+    @OnClick({R.id.img_ringtone, R.id.text_ringtone})
     public void toneOnClick() {
+
         Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
@@ -430,25 +548,13 @@ public class AlertView extends LinearLayout {
             if (mAlert.getFrequencyDisplay() != null) {
                 textFrequency.setText(mAlert.getFrequencyDisplay());
             }
+            NotificationManager mNotificationManager =
+                    (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancel(mAlert.getId());
+
             Toast.makeText(mContext, "Stopped", Toast.LENGTH_SHORT).show();
         }
         mAdapter.saveData();
-    }
-
-    private void turnOnDayOfWeek(Button button) {
-        button.setActivated(true);
-        button.setTextColor(getResources().getColor(R.color.black));
-        if (Build.VERSION.SDK_INT < 21) {
-            button.setBackgroundResource(R.drawable.bg_day_selected);
-        }
-    }
-
-    private void turnOffDayOfWeek(Button button) {
-        button.setActivated(false);
-        button.setTextColor(getResources().getColor(R.color.text_primary));
-        if (Build.VERSION.SDK_INT < 21) {
-            button.setBackgroundResource(0);
-        }
     }
 
     private static void expandView(final View view) {
@@ -501,12 +607,5 @@ public class AlertView extends LinearLayout {
 
     private static boolean isTimeBefore(int isThisHour, int isThisMinute, int beforeThisHour, int beforeThisMinute) {
         return (isThisHour < beforeThisHour) || (isThisHour == beforeThisHour && isThisMinute < beforeThisMinute);
-    }
-
-    private static Typeface getFrequencyFont() {
-        if (frequencyFont == null) {
-            frequencyFont = Typeface.create("sans-serif-light", Typeface.NORMAL);
-        }
-        return frequencyFont;
     }
 }

@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 24
+    buildToolsVersion '24.0.3'
 
     defaultConfig {
-        applicationId "nkarasch.metronomelife"
-        minSdkVersion 14
-        targetSdkVersion 21
+        applicationId "nkarasch.repeatingreminder"
+        minSdkVersion 16
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
     }
@@ -18,10 +19,12 @@ android {
         }
     }
 
+    //noinspection GroovyMissingReturnStatement
     lintOptions {
         disable 'InvalidPackage'
     }
 
+    //noinspection GroovyMissingReturnStatement
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
@@ -29,9 +32,11 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:21.0.3'
-    compile 'com.google.code.gson:gson:2.3.1'
-    compile project(':android-betterpickers')
-    compile 'com.jakewharton:butterknife:6.1.0'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.code-troopers.betterpickers:library:3.0.1'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
 }

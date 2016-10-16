@@ -1,6 +1,6 @@
 package nkarasch.repeatingreminder.scheduling;
 /*
- * Copyright (C) 2015 Nick Karasch <nkarasch@gmail.com>
+ * Copyright (C) 2015-2016 Nick Karasch <nkarasch@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import android.content.Intent;
 import java.util.Calendar;
 
 import nkarasch.repeatingreminder.Alert;
+import nkarasch.repeatingreminder.utils.DataUtils;
 
 public class AlarmHandler {
 
@@ -46,7 +47,8 @@ public class AlarmHandler {
 
     public void startAlert(Alert alert) {
         Intent intent = new Intent(mContext, AlertBroadcastReceiver.class);
-        intent.putExtra("alert", alert);
+
+        intent.putExtra("alert", DataUtils.serialize(alert));
         intent.putExtra("initial", true);
         stopAlert(alert);
 

@@ -10,15 +10,6 @@
         <item name="colorAccent">@color/accent</item>
     </style>
 
-    <style name="no_alarms">
-        <item name="android:textSize">@dimen/alarm_info_font_size</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="body">
-        <item name="android:textSize">@dimen/body_font_size</item>
-    </style>
-
     <style name="frequency_picker_dialog">
         <item name="bpDialogBackground">@color/light_gray</item>
         <item name="bpTitleColor">@color/white</item>

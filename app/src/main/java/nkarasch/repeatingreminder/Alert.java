@@ -1,6 +1,6 @@
 package nkarasch.repeatingreminder;
 /*
- * Copyright (C) 2015 Nick Karasch <nkarasch@gmail.com>
+ * Copyright (C) 2015-2016 Nick Karasch <nkarasch@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,16 @@ package nkarasch.repeatingreminder;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Parcel;
-import android.os.Parcelable;
 
-public class Alert implements Parcelable {
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Locale;
+
+
+public class Alert implements Serializable {
 
     private boolean mOn;
     private String mLabel = "Add Label";
@@ -28,7 +32,7 @@ public class Alert implements Parcelable {
 
     // Scheduling components
     private boolean mSchedule;
-    private boolean[] mDaysEnabled = new boolean[]{true, true, true, true, true, true, true};
+    private final boolean[] mDaysEnabled = new boolean[]{true, true, true, true, true, true, true};
     private int mStartHour = 0;
     private int mStartMinute = 0;
     private int mEndHour = 23;
@@ -36,7 +40,7 @@ public class Alert implements Parcelable {
 
     // Notification style options
     private boolean mVibrate;
-    private boolean mLight;
+    private boolean mWake;
     private boolean mMute;
     private String mToneURI;
     private String mToneTitle;
@@ -99,9 +103,32 @@ public class Alert implements Parcelable {
 
         if (seconds > 0) {
             return seconds + "\"";
-        } else {
-            return "Set Frequency";
         }
+        return "Set Frequency";
+    }
+
+    /**
+     * @return a string in (hour) hours (minute) minutes (second) seconds format to display the chosen frequency to the
+     * user
+     */
+    public String getLongFormFrequencyDisplay() {
+        int hours = mFrequency / 3600;
+        int minutes = (mFrequency / 60) % 60;
+        int seconds = mFrequency % 60;
+
+        if (hours > 0) {
+            return hours + ((hours == 1) ? " hour " : " hours ") + minutes + ((minutes == 1) ? " minute " : " minutes ") + seconds + ((seconds == 1) ? " second" : " seconds");
+        }
+
+        if (minutes > 0) {
+            return minutes + ((minutes == 1) ? " minute " : " minutes ") + seconds + ((seconds == 1) ? " second" : " seconds");
+        }
+
+        if (seconds > 0) {
+            return seconds + ((seconds == 1) ? " second" : " seconds");
+        }
+
+        return "Set Frequency";
     }
 
     /**
@@ -135,7 +162,7 @@ public class Alert implements Parcelable {
                 displayHour = 12;
             }
 
-            return String.format("%1$2s", displayHour) + ":" + String.format("%02d", mStartMinute) + amPM;
+            return String.format("%1$2s", displayHour) + ":" + String.format(Locale.getDefault(), "%02d", mStartMinute) + amPM;
         } else {
             return "";
         }
@@ -160,7 +187,7 @@ public class Alert implements Parcelable {
                 displayHour = 12;
             }
 
-            return String.format("%1$2s", displayHour) + ":" + String.format("%02d", mEndMinute) + amPM;
+            return String.format("%1$2s", displayHour) + ":" + String.format(Locale.getDefault(), "%02d", mEndMinute) + amPM;
         } else {
             return "";
         }
@@ -172,7 +199,7 @@ public class Alert implements Parcelable {
      */
     public String getDaysDisplay() {
 
-        if(mSchedule) {
+        if (mSchedule) {
             StringBuilder daysDisplay = new StringBuilder();
 
             for (int i = 0; i < mDaysEnabled.length; i++) {
@@ -431,15 +458,15 @@ public class Alert implements Parcelable {
     /**
      * @return has the user requested the devices light flash when the notification is fired
      */
-    public boolean isLight() {
-        return mLight;
+    public boolean isWake() {
+        return mWake;
     }
 
     /**
-     * @param light has the user requested the devices light flash when the notification is fired
+     * @param wake has the user requested the devices light flash when the notification is fired
      */
-    public void setLight(boolean light) {
-        this.mLight = light;
+    public void setWake(boolean wake) {
+        this.mWake = wake;
     }
 
     /**
@@ -475,62 +502,26 @@ public class Alert implements Parcelable {
         mNewlyCreated = false;
     }
 
-    protected Alert(Parcel in) {
-        mOn = in.readByte() != 0x00;
-        mLabel = in.readString();
-        mId = in.readInt();
-        mFrequency = in.readInt();
-        mSchedule = in.readByte() != 0x00;
-        in.readBooleanArray(mDaysEnabled);
-        mStartHour = in.readInt();
-        mStartMinute = in.readInt();
-        mEndHour = in.readInt();
-        mEndMinute = in.readInt();
-        mVibrate = in.readByte() != 0x00;
-        mLight = in.readByte() != 0x00;
-        mMute = in.readByte() != 0x00;
-        mToneURI = in.readString();
-        mToneTitle = in.readString();
-        mExpanded = in.readByte() != 0x00;
-        mNewlyCreated = in.readByte() != 0x00;
-    }
-
     @Override
-    public int describeContents() {
-        return 0;
+    public String toString() {
+        return "Alert{" +
+                "mOn=" + mOn +
+                ", mLabel='" + mLabel + '\'' +
+                ", mId=" + mId +
+                ", mFrequency=" + mFrequency +
+                ", mSchedule=" + mSchedule +
+                ", mDaysEnabled=" + Arrays.toString(mDaysEnabled) +
+                ", mStartHour=" + mStartHour +
+                ", mStartMinute=" + mStartMinute +
+                ", mEndHour=" + mEndHour +
+                ", mEndMinute=" + mEndMinute +
+                ", mVibrate=" + mVibrate +
+                ", mWake=" + mWake +
+                ", mMute=" + mMute +
+                ", mToneURI='" + mToneURI + '\'' +
+                ", mToneTitle='" + mToneTitle + '\'' +
+                ", mExpanded=" + mExpanded +
+                ", mNewlyCreated=" + mNewlyCreated +
+                '}';
     }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeByte((byte) (mOn ? 0x01 : 0x00));
-        dest.writeString(mLabel);
-        dest.writeInt(mId);
-        dest.writeInt(mFrequency);
-        dest.writeByte((byte) (mSchedule ? 0x01 : 0x00));
-        dest.writeBooleanArray(mDaysEnabled);
-        dest.writeInt(mStartHour);
-        dest.writeInt(mStartMinute);
-        dest.writeInt(mEndHour);
-        dest.writeInt(mEndMinute);
-        dest.writeByte((byte) (mVibrate ? 0x01 : 0x00));
-        dest.writeByte((byte) (mLight ? 0x01 : 0x00));
-        dest.writeByte((byte) (mMute ? 0x01 : 0x00));
-        dest.writeString(mToneURI);
-        dest.writeString(mToneTitle);
-        dest.writeByte((byte) (mExpanded ? 0x01 : 0x00));
-        dest.writeByte((byte) (mNewlyCreated ? 0x01 : 0x00));
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Alert> CREATOR = new Parcelable.Creator<Alert>() {
-        @Override
-        public Alert createFromParcel(Parcel in) {
-            return new Alert(in);
-        }
-
-        @Override
-        public Alert[] newArray(int size) {
-            return new Alert[size];
-        }
-    };
 }

@@ -1,6 +1,6 @@
 package nkarasch.repeatingreminder;
 /*
- * Copyright (C) 2015 Nick Karasch <nkarasch@gmail.com>
+ * Copyright (C) 2015-2016 Nick Karasch <nkarasch@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,14 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.app.FragmentActivity;
 
 import nkarasch.repeatingreminder.gui.AlertListAdapter;
 import nkarasch.repeatingreminder.scheduling.AlarmHandler;
 import nkarasch.repeatingreminder.utils.ColorUtils;
 import nkarasch.repeatingreminder.utils.DataUtils;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends FragmentActivity {
 
     private AlertListAdapter mArrayAdapter;
     private List<Alert> mAlertList;
@@ -48,6 +48,7 @@ public class MainActivity extends ActionBarActivity {
         mArrayAdapter = new AlertListAdapter(this, alarmHandler, mAlertList);
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -63,7 +64,7 @@ public class MainActivity extends ActionBarActivity {
         if (resultCode == Activity.RESULT_OK && requestCode == 5) {
             Alert alert = mAlertList.get(getIntent().getIntExtra("array_index", 0));
             Uri uri = intent.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             if (uri != null) {
                 Ringtone ringtone = RingtoneManager.getRingtone(this, uri);
                 if (ringtone != null) {

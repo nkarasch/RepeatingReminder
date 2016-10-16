@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="alarm_bottom_padding">16dp</dimen>
+    <dimen name="trash_bottom_padding">8dp</dimen>
+    <dimen name="alarm_text_left_padding">16dp</dimen>
+</resources>

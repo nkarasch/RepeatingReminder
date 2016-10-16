@@ -350,12 +350,6 @@ public class DialogBuilder extends AlertDialog.Builder {
     }
 
     @Override
-    public DialogBuilder setInverseBackgroundForced(boolean useInverseBackground) {
-        super.setInverseBackgroundForced(useInverseBackground);
-        return this;
-    }
-
-    @Override
     public AlertDialog show() {
         final AlertDialog dialog = super.show();
         setIconColor(dialog, mIconColor);

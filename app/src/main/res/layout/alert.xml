@@ -1,72 +1,69 @@
-<?xml version="1.0" encoding="utf-8"?>
 <nkarasch.repeatingreminder.gui.AlertView xmlns:android="http://schemas.android.com/apk/res/android"
-                                       android:id="@+id/alert_view"
-                                       android:layout_width="match_parent"
-                                       android:layout_height="match_parent"
-                                       android:orientation="vertical"
-                                       android:paddingRight="10dp"
-                                       android:paddingLeft="10dp"
-                                       android:elevation="5dp"
-                                       android:background="@color/primary">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:elevation="5dp"
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:clickable="true"
-                    android:id="@+id/rl_display">
+    <RelativeLayout
+        android:id="@+id/rl_display"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/text_label_display"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-            android:textSize="20sp"
-            android:textColor="@color/text_primary"/>
+            android:textColor="@color/text_primary"
+            android:textSize="20sp" />
 
-        <!--fontFamily is addressed programatically for devices below API 16 -->
-        <TextView
+         <TextView
             android:id="@+id/text_frequency"
             android:layout_width="wrap_content"
-            android:textSize="35sp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/text_label_display"
+            android:fontFamily="sans-serif-thin"
             android:padding="30dp"
             android:paddingTop="20dp"
-            android:fontFamily="sans-serif-thin"
-            android:layout_alignTop="@id/text_label_display"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_primary"/>
+            android:textColor="@color/text_primary"
+            android:textSize="35sp" />
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/switch_on_off"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:focusable="false"
-            android:textColor="@color/text_primary"/>
+            android:textColor="@color/text_primary" />
 
         <TextView
             android:id="@+id/text_days_display"
             android:layout_width="wrap_content"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:paddingLeft="10dp"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/text_frequency"
-            android:textColor="@color/text_primary"/>
+            android:paddingLeft="@dimen/text_days_padding"
+            android:textColor="@color/text_primary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/text_times_display"
             android:layout_width="wrap_content"
-            android:textSize="12sp"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/text_frequency"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_marginLeft="40dp"
             android:layout_marginStart="40dp"
-            android:textColor="@color/text_primary"/>
+            android:textColor="@color/text_primary"
+            android:textSize="12sp" />
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -80,164 +77,330 @@
                 android:id="@+id/iv_expand_down"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_expand_down"
                 android:layout_gravity="center_vertical"
                 android:background="@null"
-                android:contentDescription="@string/expand"/>
+                android:contentDescription="@string/expand"
+                android:src="@drawable/ic_expand_down" />
 
         </FrameLayout>
 
     </RelativeLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:orientation="vertical"
-                  android:paddingRight="10dp"
-                  android:paddingLeft="10dp"
-                  android:id="@+id/ll_expansion"
-                  android:animateLayoutChanges="true"
-                  android:visibility="gone">
+    <RelativeLayout
+        android:id="@+id/rl_expansion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <CheckBox
-            android:id="@+id/check_schedule"
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/checkbox_schedule"
             android:layout_width="wrap_content"
-            android:layout_height="48dip"
-            android:layout_gravity="center_vertical|start"
-            android:text="@string/schedule"
-            android:textSize="16sp"
-            android:paddingLeft="@dimen/padding_checkbox"
-            android:textColor="@color/text_primary"/>
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:button="@drawable/checkbox"
+            android:gravity="top"
+            android:paddingBottom="@dimen/alarm_bottom_padding"
+            android:src="@drawable/ic_tab_alarm_activated" />
 
-        <LinearLayout
-            android:id="@+id/ll_schedule_expansion"
+        <TextView
+            android:id="@+id/checkbox_schedule_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/checkbox_schedule"
+            android:layout_toRightOf="@id/checkbox_schedule"
+            android:paddingBottom="@dimen/alarm_bottom_padding"
+            android:paddingLeft="@dimen/alarm_text_left_padding"
+            android:paddingStart="@dimen/alarm_text_left_padding"
+            android:text="@string/schedule" />
+
+        <RelativeLayout
+            android:id="@+id/rl_schedule_expansion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/checkbox_schedule"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/ll_schedule_days"
                 android:layout_width="match_parent"
-                android:layout_height="48dip"
-                android:layout_gravity="top"
-                android:orientation="horizontal">
-                <!-- Day buttons are put here programatically -->
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="7"
+                android:paddingBottom="@dimen/alarm_bottom_padding">
+
+                <nkarasch.repeatingreminder.gui.CircleToggleButton
+                    android:id="@+id/sunday_toggle"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="S"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    app:ctb_off_color="@android:color/transparent"
+                    app:ctb_off_text_color="@android:color/white"
+                    app:ctb_on_color="@android:color/white"
+                    app:ctb_on_text_color="@android:color/black" />
+
+                <nkarasch.repeatingreminder.gui.CircleToggleButton
+                    android:id="@+id/monday_toggle"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="M"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    app:ctb_off_color="@android:color/transparent"
+                    app:ctb_off_text_color="@android:color/white"
+                    app:ctb_on_color="@android:color/white"
+                    app:ctb_on_text_color="@android:color/black" />
+
+                <nkarasch.repeatingreminder.gui.CircleToggleButton
+                    android:id="@+id/tuesday_toggle"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="T"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    app:ctb_off_color="@android:color/transparent"
+                    app:ctb_off_text_color="@android:color/white"
+                    app:ctb_on_color="@android:color/white"
+                    app:ctb_on_text_color="@android:color/black" />
+
+                <nkarasch.repeatingreminder.gui.CircleToggleButton
+                    android:id="@+id/wednesday_toggle"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="W"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    app:ctb_off_color="@android:color/transparent"
+                    app:ctb_off_text_color="@android:color/white"
+                    app:ctb_on_color="@android:color/white"
+                    app:ctb_on_text_color="@android:color/black" />
+
+                <nkarasch.repeatingreminder.gui.CircleToggleButton
+                    android:id="@+id/thursday_toggle"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="R"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    app:ctb_off_color="@android:color/transparent"
+                    app:ctb_off_text_color="@android:color/white"
+                    app:ctb_on_color="@android:color/white"
+                    app:ctb_on_text_color="@android:color/black" />
+
+                <nkarasch.repeatingreminder.gui.CircleToggleButton
+                    android:id="@+id/friday_toggle"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="F"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    app:ctb_off_color="@android:color/transparent"
+                    app:ctb_off_text_color="@android:color/white"
+                    app:ctb_on_color="@android:color/white"
+                    app:ctb_on_text_color="@android:color/black" />
+
+                <nkarasch.repeatingreminder.gui.CircleToggleButton
+                    android:id="@+id/saturday_toggle"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="S"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    app:ctb_off_color="@android:color/transparent"
+                    app:ctb_off_text_color="@android:color/white"
+                    app:ctb_on_color="@android:color/white"
+                    app:ctb_on_text_color="@android:color/black" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/text_time_start"
-                android:layout_width="wrap_content"
-                android:layout_height="48dip"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:paddingLeft="4dip"
-                android:drawablePadding="20dp"
-                android:drawableLeft="@drawable/ic_tab_alarm_activated"
-                android:drawableStart="@drawable/ic_tab_alarm_activated"
-                android:ellipsize="marquee"
-                android:gravity="center_vertical"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                android:textSize="16sp"
-                android:textColor="@color/text_primary"/>
-
-            <TextView
-                android:id="@+id/text_time_end"
-                android:layout_width="wrap_content"
-                android:layout_height="48dip"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:paddingLeft="4dip"
-                android:drawablePadding="20dp"
-                android:drawableLeft="@drawable/ic_alarm_off_black"
-                android:drawableStart="@drawable/ic_alarm_off_black"
-                android:ellipsize="marquee"
-                android:gravity="center_vertical"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                android:textSize="16sp"
-                android:textColor="@color/text_primary"/>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/text_tone"
-            android:layout_width="wrap_content"
-            android:layout_height="48dip"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:paddingLeft="4dip"
-            android:drawablePadding="20dp"
-            android:drawableLeft="@drawable/ic_ringtone"
-            android:drawableStart="@drawable/ic_ringtone"
-            android:ellipsize="marquee"
-            android:gravity="center_vertical"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
-            android:textSize="16sp"
-            android:textColor="@color/text_primary"/>
-
-        <CheckBox
-            android:id="@+id/check_mute"
-            android:layout_width="wrap_content"
-            android:layout_height="48dip"
-            android:layout_gravity="center_vertical|start"
-            android:text="@string/mute"
-            android:textSize="16sp"
-            android:paddingLeft="@dimen/padding_checkbox"
-            android:textColor="@color/text_primary"/>
-
-        <CheckBox
-            android:id="@+id/check_vibrate"
-            android:layout_width="wrap_content"
-            android:layout_height="48dip"
-            android:layout_gravity="center_vertical|start"
-            android:text="@string/vibrate"
-            android:textSize="16sp"
-            android:paddingLeft="@dimen/padding_checkbox"
-            android:textColor="@color/text_primary"/>
-
-        <CheckBox
-            android:id="@+id/check_light"
-            android:layout_width="wrap_content"
-            android:layout_height="48dip"
-            android:layout_gravity="center_vertical|start"
-            android:text="@string/light"
-            android:textSize="16sp"
-            android:paddingLeft="@dimen/padding_checkbox"
-            android:textColor="@color/text_primary"/>
-
-        <RelativeLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <ImageButton
-                android:id="@+id/ib_delete"
+            <ImageView
+                android:id="@+id/img_alarm_on"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_delete_small"
-                android:background="@null"
-                android:layout_centerInParent="true"
-                android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:contentDescription="@string/delete_alert"/>
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/ll_schedule_days"
+                android:contentDescription="@string/alarm_on"
+                android:paddingBottom="@dimen/alarm_bottom_padding"
+                android:src="@drawable/ic_tab_alarm_activated" />
+
+            <TextView
+                android:id="@+id/text_alarm_on"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ll_schedule_days"
+                android:layout_gravity="center_vertical"
+                android:layout_toEndOf="@id/img_alarm_on"
+                android:layout_toRightOf="@id/img_alarm_on"
+                android:paddingBottom="@dimen/alarm_bottom_padding"
+                android:paddingLeft="@dimen/alarm_text_left_padding"
+                android:paddingStart="@dimen/alarm_text_left_padding"
+                android:text="@string/day_start" />
 
             <ImageView
-                android:id="@+id/iv_expand_up"
+                android:id="@+id/img_alarm_off"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_expand_down"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/img_alarm_on"
+                android:contentDescription="@string/alarm_off"
+                android:paddingBottom="@dimen/alarm_bottom_padding"
+                android:src="@drawable/ic_alarm_off_black" />
+
+            <TextView
+                android:id="@+id/text_alarm_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/img_alarm_on"
                 android:layout_gravity="center_vertical"
-                android:background="@null"
-                android:layout_centerInParent="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:rotation="180"
-                android:contentDescription="@string/expand"/>
+                android:layout_toEndOf="@id/img_alarm_off"
+                android:layout_toRightOf="@id/img_alarm_off"
+                android:paddingBottom="@dimen/alarm_bottom_padding"
+                android:paddingLeft="@dimen/alarm_text_left_padding"
+                android:paddingStart="@dimen/alarm_text_left_padding"
+                android:text="@string/day_end" />
         </RelativeLayout>
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/img_ringtone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/rl_schedule_expansion"
+            android:contentDescription="@string/ringtone"
+            android:paddingBottom="@dimen/alarm_bottom_padding"
+            android:src="@drawable/ic_ringtone" />
+
+        <TextView
+            android:id="@+id/text_ringtone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rl_schedule_expansion"
+            android:layout_gravity="center_vertical"
+            android:layout_toEndOf="@id/img_ringtone"
+            android:layout_toRightOf="@id/img_ringtone"
+            android:paddingBottom="@dimen/alarm_bottom_padding"
+            android:paddingLeft="@dimen/alarm_text_left_padding"
+            android:paddingStart="@dimen/alarm_text_left_padding"
+            android:text="@string/default_ringtone" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/checkbox_mute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/img_ringtone"
+            android:button="@drawable/checkbox"
+            android:gravity="top"
+            android:paddingBottom="@dimen/alarm_bottom_padding"
+            android:src="@drawable/ic_tab_alarm_activated" />
+
+        <TextView
+            android:id="@+id/checkbox_mute_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_ringtone"
+            android:layout_gravity="center_vertical"
+            android:layout_toEndOf="@id/checkbox_mute"
+            android:layout_toRightOf="@id/checkbox_mute"
+            android:paddingBottom="@dimen/alarm_bottom_padding"
+            android:paddingLeft="@dimen/alarm_text_left_padding"
+            android:paddingStart="@dimen/alarm_text_left_padding"
+            android:text="@string/mute" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/checkbox_vibrate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/checkbox_mute"
+            android:button="@drawable/checkbox"
+            android:gravity="top"
+            android:paddingBottom="@dimen/alarm_bottom_padding"
+            android:src="@drawable/ic_tab_alarm_activated" />
+
+        <TextView
+            android:id="@+id/checkbox_vibrate_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/checkbox_mute"
+            android:layout_gravity="center_vertical"
+            android:layout_toEndOf="@id/checkbox_vibrate"
+            android:layout_toRightOf="@id/checkbox_vibrate"
+            android:paddingBottom="@dimen/alarm_bottom_padding"
+            android:paddingLeft="@dimen/alarm_text_left_padding"
+            android:paddingStart="@dimen/alarm_text_left_padding"
+            android:text="@string/vibrate" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/checkbox_wake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/checkbox_vibrate"
+            android:button="@drawable/checkbox"
+            android:gravity="top"
+            android:paddingBottom="@dimen/alarm_bottom_padding"
+            android:src="@drawable/ic_tab_alarm_activated" />
+
+        <TextView
+            android:id="@+id/checkbox_wake_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/checkbox_vibrate"
+            android:layout_gravity="center_vertical"
+            android:layout_toEndOf="@id/checkbox_wake"
+            android:layout_toRightOf="@id/checkbox_wake"
+            android:paddingBottom="@dimen/alarm_bottom_padding"
+            android:paddingLeft="@dimen/alarm_text_left_padding"
+            android:paddingStart="@dimen/alarm_text_left_padding"
+            android:text="@string/wake" />
+
+        <View
+            android:id="@+id/divider_line"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/checkbox_wake"
+            android:layout_marginBottom="@dimen/trash_bottom_padding"
+            android:layout_height="1dp"
+            android:background="@color/accent" />
+
+        <ImageButton
+            android:id="@+id/ib_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/divider_line"
+            android:layout_centerInParent="true"
+            android:background="@null"
+            android:contentDescription="@string/delete_alert"
+            android:paddingBottom="@dimen/trash_bottom_padding"
+            android:src="@drawable/ic_delete_small" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/divider_line"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:background="@null"
+            android:contentDescription="@string/expand"
+            android:rotation="180"
+            android:src="@drawable/ic_expand_down" />
+    </RelativeLayout>
 </nkarasch.repeatingreminder.gui.AlertView>
